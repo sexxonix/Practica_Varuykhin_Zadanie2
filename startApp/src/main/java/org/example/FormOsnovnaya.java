@@ -9,7 +9,17 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+/**
+ * Класс FormOsnovnaya создает графический интерфейс для выбора формата и типа
+ * для конвертации с использованием интерфейса SearadarExchangeConverter.
+ */
 public class FormOsnovnaya {
+
+    /**
+     * Главный метод инициализирует и отображает главное окно приложения.
+     *
+     * @param args аргументы командной строки
+     */
     public static void main(String[] args) {
         JFrame mainFrame = new JFrame("Converter");
         mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -44,6 +54,11 @@ public class FormOsnovnaya {
         panel.add(typeComboBox, gbc);
 
         formatComboBox.addActionListener(new ActionListener() {
+            /**
+             * Обрабатывает событие действия при изменении выбора в комбобоксе форматов.
+             *
+             * @param e событие действия
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 JComboBox cb = (JComboBox) e.getSource();
@@ -68,6 +83,11 @@ public class FormOsnovnaya {
         panel.add(submitButton, gbc);
 
         submitButton.addActionListener(new ActionListener() {
+            /**
+             * Обрабатывает событие действия при нажатии кнопки "Перейти".
+             *
+             * @param e событие действия
+             */
             @Override
             public void actionPerformed(ActionEvent e) {
                 String selectedFormat = (String) formatComboBox.getSelectedItem();

@@ -14,6 +14,10 @@ import java.awt.event.MouseEvent;
 import java.sql.*;
 import java.util.List;
 
+/**
+ * Класс FormRSD создает форму для работы с сообщениями типа RSD.
+ * Включает возможность сохранения, загрузки и декодирования сообщений.
+ */
 public class FormRSD {
     private JFrame frame;
     private JList<String> messageList;
@@ -24,6 +28,12 @@ public class FormRSD {
     private JButton backButton;
     private SearadarExchangeConverter converter;
 
+    /**
+     * Конструктор для создания формы RSD.
+     *
+     * @param converter конвертер сообщений SearadarExchangeConverter
+     * @param mainFrame главное окно приложения
+     */
     public FormRSD(SearadarExchangeConverter converter, JFrame mainFrame) {
         this.converter = converter;
         this.frame = new JFrame("RSD Form");
@@ -48,7 +58,6 @@ public class FormRSD {
         gbc.gridy = 1;
         gbc.gridwidth = 2;
         this.frame.add(contentScrollPane, gbc);
-
 
         JLabel selectLabel = new JLabel("Выберите строку:");
         gbc.gridx = 0;
@@ -97,6 +106,11 @@ public class FormRSD {
         });
 
         messageList.addMouseListener(new MouseAdapter() {
+            /**
+             * Обрабатывает событие двойного щелчка на элементе списка сообщений.
+             *
+             * @param e событие мыши
+             */
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     String selectedMessage = messageList.getSelectedValue();
@@ -130,6 +144,14 @@ public class FormRSD {
         this.frame.setVisible(true);
     }
 
+    /**
+     * Сохраняет сообщение в базу данных.
+     *
+     * @param format формат сообщения
+     * @param type тип сообщения
+     * @param content содержание сообщения
+     * @throws SQLException если происходит ошибка при сохранении
+     */
     private void saveMessage(String format, String type, String content) throws SQLException {
         String url = "jdbc:postgresql://" + System.getenv("DB_HOST") + ":" + System.getenv("DB_PORT") + "/" + System.getenv("DB_NAME");
         String user = System.getenv("DB_USER");
@@ -152,6 +174,12 @@ public class FormRSD {
         }
     }
 
+    /**
+     * Загружает сообщения из базы данных.
+     *
+     * @param type тип сообщения
+     * @throws SQLException если происходит ошибка при загрузке
+     */
     private void loadMessages(String type) throws SQLException {
         String url = "jdbc:postgresql://" + System.getenv("DB_HOST") + ":" + System.getenv("DB_PORT") + "/" + System.getenv("DB_NAME");
         String user = System.getenv("DB_USER");
@@ -175,6 +203,12 @@ public class FormRSD {
         }
     }
 
+    /**
+     * Декодирует сообщение с использованием SearadarExchangeConverter.
+     *
+     * @param message сообщение для декодирования
+     * @throws Exception если происходит ошибка при декодировании
+     */
     private void decodeMessage(String message) throws Exception {
         try {
             CamelContext context = new DefaultCamelContext();

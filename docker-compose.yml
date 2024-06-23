@@ -1,40 +1,55 @@
 version: '3.8'
+
 services:
+  # Конфигурация сервиса базы данных
   db:
+    # Использование образа PostgreSQL
     image: postgres:latest
+    # Установка переменных окружения для PostgreSQL
     environment:
       POSTGRES_DB: MR
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: Oor7iedi
+    # Проброс порта для доступа к базе данных
     ports:
       - "5432:5432"
+    # Проверка состояния сервиса базы данных
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres -d MR"]
       interval: 10s
       timeout: 5s
       retries: 5
+    # Подключение к сети app-network
     networks:
       - app-network
+    # Подключение файла инициализации базы данных
     volumes:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
 
+  # Конфигурация сервиса приложения
   app:
+    # Построение образа приложения с использованием Dockerfile
     build:
       context: .
       dockerfile: Dockerfile
+    # Зависимость от сервиса базы данных
     depends_on:
       db:
         condition: service_healthy
+    # Установка переменных окружения для подключения к базе данных
     environment:
       DB_HOST: db
       DB_PORT: 5432
       DB_NAME: MR
       DB_USER: postgres
       DB_PASSWORD: Oor7iedi
+    # Подключение к сети app-network
     networks:
       - app-network
+    # Перезапуск сервиса в случае сбоя
     restart: on-failure
 
+# Определение пользовательской сети для сервисов
 networks:
   app-network:
     driver: bridge

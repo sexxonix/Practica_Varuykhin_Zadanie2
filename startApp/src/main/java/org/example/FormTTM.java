@@ -14,6 +14,10 @@ import java.awt.event.MouseEvent;
 import java.sql.*;
 import java.util.List;
 
+/**
+ * Класс FormTTM создает форму для работы с сообщениями типа TTM.
+ * Включает возможность сохранения, загрузки и декодирования сообщений.
+ */
 public class FormTTM {
     private JFrame frame;
     private JList<String> messageList;
@@ -23,6 +27,12 @@ public class FormTTM {
     private JButton saveButton;
     private SearadarExchangeConverter converter;
 
+    /**
+     * Конструктор для создания формы TTM.
+     *
+     * @param converter конвертер сообщений SearadarExchangeConverter
+     * @param mainFrame главное окно приложения
+     */
     public FormTTM(SearadarExchangeConverter converter, JFrame mainFrame) {
         this.converter = converter;
         this.frame = new JFrame("TTM Form");
@@ -95,6 +105,11 @@ public class FormTTM {
         });
 
         messageList.addMouseListener(new MouseAdapter() {
+            /**
+             * Обрабатывает событие двойного щелчка на элементе списка сообщений.
+             *
+             * @param e событие мыши
+             */
             public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     String selectedMessage = messageList.getSelectedValue();
@@ -128,6 +143,14 @@ public class FormTTM {
         this.frame.setVisible(true);
     }
 
+    /**
+     * Сохраняет сообщение в базу данных.
+     *
+     * @param format формат сообщения
+     * @param type тип сообщения
+     * @param content содержание сообщения
+     * @throws SQLException если происходит ошибка при сохранении
+     */
     private void saveMessage(String format, String type, String content) throws SQLException {
         String url = "jdbc:postgresql://" + System.getenv("DB_HOST") + ":" + System.getenv("DB_PORT") + "/" + System.getenv("DB_NAME");
         String user = System.getenv("DB_USER");
@@ -150,6 +173,12 @@ public class FormTTM {
         }
     }
 
+    /**
+     * Загружает сообщения из базы данных.
+     *
+     * @param type тип сообщения
+     * @throws SQLException если происходит ошибка при загрузке
+     */
     private void loadMessages(String type) throws SQLException {
         String url = "jdbc:postgresql://" + System.getenv("DB_HOST") + ":" + System.getenv("DB_PORT") + "/" + System.getenv("DB_NAME");
         String user = System.getenv("DB_USER");
@@ -173,6 +202,12 @@ public class FormTTM {
         }
     }
 
+    /**
+     * Декодирует сообщение с использованием SearadarExchangeConverter.
+     *
+     * @param message сообщение для декодирования
+     * @throws Exception если происходит ошибка при декодировании
+     */
     private void decodeMessage(String message) throws Exception {
         try {
             CamelContext context = new DefaultCamelContext();
